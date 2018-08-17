@@ -1,0 +1,95 @@
+<% layout('/layouts/default.html', {title: '栏目管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('栏目管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<a href="#" class="btn btn-default" id="btnRefreshTree" title="${text('刷新')}"><i class="fa fa-refresh"></i> ${text('刷新')}</a>
+				<a href="#" class="btn btn-default" id="btnExpandTreeNode" title="${text('展开一级')}"><i class="fa fa-angle-double-down"></i> ${text('展开')}</a>
+				<a href="#" class="btn btn-default" id="btnCollapseTreeNode" title="${text('折叠全部')}"><i class="fa fa-angle-double-up"></i> ${text('折叠')}</a>
+				<% if(hasPermi('mc:category:edit')){ %>
+					<a href="${ctx}/mc/category/form" class="btn btn-default btnTool" title="${text('新增栏目')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${category}" action="${ctx}/mc/category/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('栏目编码')}：</label>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('栏目名称')}：</label>
+					<div class="control-inline">
+						<#form:input path="categoryName" maxlength="200" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('状态')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="status" dictType="sys_search_status" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		/* {header:'${text('栏目名称')}', name:'categoryName', index:'a.category_name', width:250, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '( '+row.categoryCode+' ) '+'<a href="${ctx}/mc/category/form?categoryCode='+row.categoryCode+'" class="btnList" data-title="${text('编辑栏目')}">'+(val||row.id)+'</a>';
+		}}, */
+		{header:'${text('栏目名称')}', name:'categoryName', index:'a.category_name', width:150, align:"left"},
+		{header:'${text('归属机构')}', name:'office.officeName', index:'a.office_code', width:150, align:"center"},
+		{header:'${text('栏目模型')}', name:'module', index:'a.module', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('mc_module')}, val, '${text('未知')}', true);
+		}},
+		{header:'${text('排序')}', name:'treeSort', index:'a.tree_sort', width:150, align:"center"},
+		{header:'${text('导航菜单')}', name:'inMenu', index:'a.in_menu', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('sys_show_hide')}, val, '${text('未知')}', true);
+		}},
+		{header:'${text('栏目列表')}', name:'inList', index:'a.in_list', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('sys_show_hide')}, val, '${text('未知')}', true);
+		}},
+		{header:'${text('展现方式')}', name:'showModes', index:'a.show_modes', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('mc_show_modes')}, val, '${text('未知')}', true);
+		}},
+		{header:'${text('状态')}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text('未知')}', true);
+		}},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('mc:category:edit')){ %>
+				actions.push('<a href="${ctx}/mc/category/form?categoryCode='+row.categoryCode+'" class="btnList" title="${text('编辑栏目')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				if (row.status == Global.STATUS_NORMAL){
+					actions.push('<a href="${ctx}/mc/category/disable?categoryCode='+row.categoryCode+'" class="btnList" title="${text('停用栏目')}" data-confirm="${text('确认要停用该栏目吗？')}"><i class="glyphicon glyphicon-ban-circle"></i></a>&nbsp;');
+				}
+				if (row.status == Global.STATUS_DISABLE){
+					actions.push('<a href="${ctx}/mc/category/enable?categoryCode='+row.categoryCode+'" class="btnList" title="${text('启用栏目')}" data-confirm="${text('确认要启用该栏目吗？')}"><i class="glyphicon glyphicon-ok-circle"></i></a>&nbsp;');
+				}
+				actions.push('<a href="${ctx}/mc/category/delete?categoryCode='+row.categoryCode+'" class="btnList" title="${text('删除栏目')}" data-confirm="${text('确认要删除该栏目及所有子栏目吗？')}" data-deltreenode="'+row.id+'"><i class="fa fa-trash-o"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/mc/category/form?parentCode='+row.id+'" class="btnList" title="${text('新增下级栏目')}"><i class="fa fa-plus-square"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	treeGrid: true,			// 启用树结构表格
+	defaultExpandLevel: 0,	// 默认展开的层次
+	expandNodeClearPostData: 'categoryCode,categoryName,status,', // 展开节点清理请求参数数据（一般设置查询条件的字段属性，否则在查询后，不能展开子节点数据）	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

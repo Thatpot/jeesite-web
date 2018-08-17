@@ -1,0 +1,342 @@
+<% layout('/layouts/default.html', {title: '文章管理', libs: ['validate','ueditor','fileupload']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text(article.isNewRecord ? '新增文章' : '编辑文章')}
+			</div>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			</div>
+		</div>
+		<#form:form id="inputForm" model="${article}" action="${ctx}/mc/article/save" method="post" class="form-horizontal">
+			<div class="box-body">
+				<div class="form-unit">${text('基本信息')}</div>
+				<#form:hidden path="id"/>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required ">*</span> ${text('归属栏目')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:treeselect id="category" title="${text('栏目选择')}"
+										path="category.categoryCode" labelPath="category.categoryName" 
+										url="${ctx}/mc/category/treeData" btnClass="btn-sm" allowClear="true" canSelectParent="true"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-8">
+						<div class="form-group">
+							<label class="control-label col-sm-3" title="">
+								<span class="required ">*</span> ${text('标题')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-9">
+								<#form:input path="title" maxlength="255" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-4">
+						<div class="form-group">
+							<label class="control-label col-sm-2" title="">
+								<span class="required hide">*</span> ${text('颜色')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-4">
+								<#form:select path="color" dictType="mc_color" blankOption="true" class="form-control" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-8">
+						<div class="form-group">
+							<label class="control-label col-sm-3" title="">
+								<span class="required hide">*</span> ${text('关键字')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-9">
+								<#form:input path="keywords" maxlength="255" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-4">
+						<div class="form-group">
+							<label class="control-label col-sm-6" title="">
+								<span class="required hide">*</span> ${text('权重')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-6">
+								<#form:input id="weight" path="weight" maxlength="11" class="form-control digits"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-1">
+						<div class="form-group">
+							<div class="col-sm-12">
+								<#form:checkbox path="" label="置顶" name="weightTop" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-3">
+						<div class="form-group">
+							<label class="control-label col-sm-6" title="">
+								<span class="required hide">*</span> ${text('权重期限')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-6">
+								<#form:input path="weightDate" readonly="true" maxlength="20" class="form-control Wdate"
+									dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-8">
+						<div class="form-group">
+							<label class="control-label col-sm-3" title="">
+								<span class="required hide">*</span> ${text('摘要')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-9">
+								<#form:textarea path="description" rows="4" maxlength="255" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('文章图片')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<!-- <#form:input path="image" maxlength="255" class="form-control"/> -->
+								<#form:fileupload id="uploadImage" bizKey="${article.id}" bizType="article_image"
+									uploadType="image" class="" maxUploadNum="1" readonly="false"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2" title="">
+								<span class="required hide">*</span> ${text('文章内容')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+								<#form:ueditor path="articleData.content" maxlength="10000" height="400" class=""
+									simpleToolbars="true" readonly="false" outline="false"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('推荐位')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:radio path="posid" dictType="mc_posid" class="form-control" />
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- 测试三级联动 -->
+				<div class="row">
+					<div class="col-xs-4">
+						<div class="form-group">
+							<label class="control-label col-sm-6" title="">
+								<span class="required hide">*</span> ${text('省')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-6">
+								<#form:select id="province" value="${areaProvinceDefault}" items="${areaProvince}" itemLabel="areaName" itemValue="areaCode" class="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-4">
+						<div class="form-group">
+							<label class="control-label col-sm-6" title="">
+								<span class="required hide">*</span> ${text('市')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-6">
+								<#form:select id="city" items="${areaCity}" itemLabel="areaName" itemValue="areaCode" class="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-4" id="countyBox">
+						<div class="form-group">
+							<label class="control-label col-sm-6" title="">
+								<span class="required hide">*</span> ${text('县')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-6">
+								<#form:select path="customContentView" items="${areaCounty}" itemLabel="areaName" itemValue="areaCode"  class="form-control" />
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('视图配置')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="viewConfig" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 文章详表form -->
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('文章来源')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="articleData.copyfrom" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('相关文章')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input id="articleDataRelation" path="articleData.relation" class="form-control hide" />
+								<ol id="relationArticleList"></ol>
+								<div class="hide">
+									<#form:listselect id="articleSelect" title="文章选择" 
+								    	url="${ctx}/mc/article/articleSelect" allowClear="false" 
+								    	checkbox="true" itemCode="aritcleId" itemName="articleTitle" />
+								</div>
+								<br>
+								<a href="#" class="btn btn-default" id="btnAddArticle" title="添加"><i class="fa fa-plus"></i> 添加</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('是否允许评论')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:radio path="articleData.allowComment" dictType="sys_yes_no" class="form-control" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row hide" id="statusBox">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2" title="">
+								<span class="required hide">*</span> ${text('发布状态')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+								<#form:radio path="status" dictType="mc_status" class="form-control" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2" title="">
+								<span class="required hide">*</span> ${text('备注信息')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+								<#form:textarea path="remarks" rows="4" maxlength="500" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="box-footer">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-10">
+						<% if (hasPermi('mc:article:edit')){ %>
+							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('保 存')}</button>&nbsp;
+						<% } %>
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
+					</div> 
+				</div>
+			</div>
+		</#form:form>
+	</div>
+</div>
+<% } %>
+<script>
+var selectData = {};
+var flag = "${isAudit}";
+if(flag == Global.TRUE){
+	$("#statusBox").removeClass("hide");
+}else{
+	$("#statusBox").addClass("hide");
+} 
+$("#inputForm").validate({
+	submitHandler: function(form){
+		js.ajaxSubmitForm($(form), function(data){
+			js.showMessage(data.message);
+			if(data.result == Global.TRUE){
+				js.closeCurrentTabPage(function(contentWindow){
+					contentWindow.page();
+				});
+			}
+		}, "json");
+    }
+});
+$("input[name='weightTop']").on('ifChecked',function(event) {
+	$("#weight").val("999");
+});
+$("input[name='weightTop']").on('ifUnchecked',function(event) {
+	$("#weight").val("0");
+});
+$('#btnAddArticle').click(function(){
+	var jsonStr = js.encodeUrl(JSON.stringify(selectData)); 
+	var url = "${ctx}/mc/article/articleSelect?data="+jsonStr;
+	$('#articleSelectDiv').attr("data-url",url);
+	$('#articleSelectName').click();
+});
+$.getJSON("${ctx}/mc/article/findByIds",{ids:$("#articleDataRelation").val()},function(data){
+	for (var i=0; i<data.length; i++){
+		selectData[data[i][1]]={
+			id : data[i][1],
+			title : data[i][2]
+		}
+	}
+	articleSelectRefresh(selectData);
+});
+function articleSelectRefresh(selectData){
+	$("#articleDataRelation").val("");
+	$("#relationArticleList").children().remove();
+	for(x in selectData){
+		var articleTitle = selectData[x].title;
+		var articleId =  selectData[x].id;
+		var originId = $("#articleDataRelation").val();
+		$("#relationArticleList").append('<li><label class="control-label">'+articleTitle+'</label</li><br>');
+		$("#articleDataRelation").val(originId + articleId+",")
+	}
+}
+function listselectCallback(id, action, index, layero, selectData){
+	if (id == 'articleSelect' && action == 'ok'){
+		this.selectData = selectData;
+		articleSelectRefresh(selectData);
+	}
+}
+//三级联动
+$('#province').on('select2:select', function (e) {
+	getDataFillSelect(e,"#city");
+});
+$('#city').on('select2:select', function (e) {
+	getDataFillSelect(e,"#customContentView");
+});
+function getDataFillSelect(e,element){
+	var parentCode = e.params.data.id;
+	  js.ajaxSubmit('${ctx}/sys/area/listData', {parentCode: parentCode}, function(data){
+		 var array = [];
+		  for (var i=0; i<data.length; i++){
+			  array[i] = {
+					id : data[i].areaCode,
+					text : data[i].areaName	  
+			  }
+		  }
+		 if(data.length==1){
+			 $("#countyBox").attr("hidden",true);
+		 }else{
+			 $("#countyBox").removeAttr("hidden");
+		 }
+		 $(element).empty();
+		 $(element).select2({data:array});
+	  })
+}
+</script>

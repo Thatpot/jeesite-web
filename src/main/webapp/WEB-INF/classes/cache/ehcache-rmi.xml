@@ -63,4 +63,8 @@
 		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory" properties="replicatePuts=false,replicateUpdatesViaCopy=false"/>
     </cache>
 	
+	<!-- 我的内容管理模块缓存 -->
+	<cache name="mcCache" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="false" diskPersistent="false" statistics="true">
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory" properties="replicatePuts=false,replicateUpdatesViaCopy=false"/>
+    </cache>
 </ehcache>
