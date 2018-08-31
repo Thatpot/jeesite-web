@@ -56,9 +56,6 @@ public class CategoryService extends TreeService<CategoryDao, Category> {
 	@Transactional(readOnly=false)
 	public void save(Category category) {
 		category.setSite(new Site(Site.getCurrentSiteId()));
-		if (StringUtils.isNotBlank(category.getViewConfig())){
-            category.setViewConfig(StringEscapeUtils.unescapeHtml4(category.getViewConfig()));
-        }
 		super.save(category);
 		// 保存上传图片
 		FileUploadUtils.saveFileUpload(category.getId(), "category_image");

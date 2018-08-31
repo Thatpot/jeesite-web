@@ -37,9 +37,6 @@ import com.jeesite.modules.sys.entity.Office;
 		@Column(name="show_modes", attrName="showModes", label="展现方式"),
 		@Column(name="allow_comment", attrName="allowComment", label="是否允许评论"),
 		@Column(name="is_audit", attrName="isAudit", label="是否需要审核"),
-		@Column(name="custom_list_view", attrName="customListView", label="自定义列表视图"),
-		@Column(name="custom_content_view", attrName="customContentView", label="自定义内容视图"),
-		@Column(name="view_config", attrName="viewConfig", label="视图配置"),
 		@Column(includeEntity=TreeEntity.class),
 		@Column(includeEntity=DataEntity.class),
 		@Column(name="site_id", attrName="site.id", label="所属站点"),
@@ -70,9 +67,6 @@ public class Category extends TreeEntity<Category> {
 	private String showModes;		// 展现方式
 	private String allowComment;		// 是否允许评论
 	private String isAudit;		// 是否需要审核
-	private String customListView;		// 自定义列表视图
-	private String customContentView;		// 自定义内容视图
-	private String viewConfig;		// 视图配置
 	private Site site;		// 所属站点
 	
 	public Category() {
@@ -223,32 +217,6 @@ public class Category extends TreeEntity<Category> {
 
 	public void setIsAudit(String isAudit) {
 		this.isAudit = isAudit;
-	}
-	
-	@Length(min=0, max=255, message="自定义列表视图长度不能超过 255 个字符")
-	public String getCustomListView() {
-		return customListView;
-	}
-
-	public void setCustomListView(String customListView) {
-		this.customListView = customListView;
-	}
-	
-	@Length(min=0, max=255, message="自定义内容视图长度不能超过 255 个字符")
-	public String getCustomContentView() {
-		return customContentView;
-	}
-
-	public void setCustomContentView(String customContentView) {
-		this.customContentView = customContentView;
-	}
-	
-	public String getViewConfig() {
-		return viewConfig;
-	}
-
-	public void setViewConfig(String viewConfig) {
-		this.viewConfig = viewConfig;
 	}
 	
 	public Site getSite() {

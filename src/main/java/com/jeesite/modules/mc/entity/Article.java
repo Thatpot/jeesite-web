@@ -58,7 +58,7 @@ public class Article extends DataEntity<Article> {
 			@ExcelField(title="点击数", attrName="hits", align=Align.CENTER, sort=60),
 			@ExcelField(title="状态", attrName="status", align=Align.CENTER, sort=70),
 			@ExcelField(title="发布者", attrName="createBy", align=Align.CENTER, sort=80),
-			@ExcelField(title="发布时间", attrName="create_date", align=Align.CENTER, sort=900, type=ExcelField.Type.EXPORT, dataFormat="yyyy-MM-dd HH:mm"),
+			@ExcelField(title="发布时间", attrName="createDate", align=Align.CENTER, sort=90, type=ExcelField.Type.EXPORT, dataFormat="yyyy-MM-dd HH:mm:ss"),
 	})
 	
 	private static final long serialVersionUID = 1L;
