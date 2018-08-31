@@ -52,9 +52,7 @@ import com.jeesite.modules.sys.entity.Office;
 	}, orderBy="a.tree_sorts, a.category_code"
 )
 public class Category extends TreeEntity<Category> {
-	public static final String DEFAULT_TEMPLATE = "frontList";
 	public static final String ARTICLE_MODULE = "article";
-	public static final String LINK_MODULE = "link";
 	public static final String PARETNT_CODE = "0";
 	
 	private static final long serialVersionUID = 1L;

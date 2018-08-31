@@ -68,10 +68,12 @@ public class ArticleService extends CrudService<ArticleDao, Article> {
 	}
 	
 	/**
-	 * 	根据父栏目id查询下属的所有文章
-	 * @param page
-	 * @param article
-	 * @return
+	 * @Description: 根据父栏目id查询下属的所有文章
+	 * @param categoryList
+	 * @returnType java.util.List<java.util.List<com.jeesite.modules.mc.entity.Article>>
+	 * @throws
+	 * @author xuyuxiang
+	 * @date 2018/8/31 15:49
 	 */
 	public List<List<Article>> findPageByCategoryParent(List<Category> categoryList) {
 		List<List<Article>> articleList = new ArrayList<List<Article>>();
@@ -109,9 +111,6 @@ public class ArticleService extends CrudService<ArticleDao, Article> {
 				article.setStatus(Article.STATUS_NORMAL);
 			}
 		}
-		if (StringUtils.isNotBlank(article.getViewConfig())){
-            article.setViewConfig(StringEscapeUtils.unescapeHtml4(article.getViewConfig()));
-        }
 		//新增的文章
 		if(article.getIsNewRecord()) {
 			ArticleData articleData = article.getArticleData();
@@ -175,20 +174,5 @@ public class ArticleService extends CrudService<ArticleDao, Article> {
 		article.setHits(article.getHits()+1);
 		super.update(article);
 		
-	}
-
-	public void createIndex() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public Page<Article> search(Page<Article> page, String qStr, String cid, String bd, String ed) {
-		// TODO Auto-generated method stub
-		return page;
-	}
-
-	public Object getArticleList(List<Category> categoryList) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

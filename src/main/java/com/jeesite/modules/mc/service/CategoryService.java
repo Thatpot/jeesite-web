@@ -17,7 +17,6 @@ import com.jeesite.modules.file.utils.FileUploadUtils;
 import com.jeesite.modules.mc.dao.CategoryDao;
 import com.jeesite.modules.mc.entity.Category;
 import com.jeesite.modules.mc.entity.Site;
-import com.jeesite.modules.mc.utils.McUtils;
 import com.jeesite.modules.sys.utils.UserUtils;
 
 /**
@@ -28,8 +27,7 @@ import com.jeesite.modules.sys.utils.UserUtils;
 @Service
 @Transactional(readOnly=true)
 public class CategoryService extends TreeService<CategoryDao, Category> {
-	public static final String CACHE_CATEGORY_LIST = "categoryList";
-	
+
 	/**
 	 * 获取单条数据
 	 * @param category
@@ -62,8 +60,6 @@ public class CategoryService extends TreeService<CategoryDao, Category> {
             category.setViewConfig(StringEscapeUtils.unescapeHtml4(category.getViewConfig()));
         }
 		super.save(category);
-		UserUtils.removeCache(CACHE_CATEGORY_LIST);
-		McUtils.removeCache("mainNavList_"+category.getSite().getId());
 		// 保存上传图片
 		FileUploadUtils.saveFileUpload(category.getId(), "category_image");
 	}
@@ -86,8 +82,6 @@ public class CategoryService extends TreeService<CategoryDao, Category> {
 	@Transactional(readOnly=false)
 	public void delete(Category category) {
 		super.delete(category);
-		UserUtils.removeCache(CACHE_CATEGORY_LIST);
-		McUtils.removeCache("mainNavList_"+category.getSite().getId());
 	}
 	
 	/**

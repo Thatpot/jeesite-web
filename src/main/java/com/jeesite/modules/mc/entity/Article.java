@@ -40,8 +40,6 @@ import com.jeesite.common.utils.excel.annotation.ExcelFields;
 		@Column(name="weight_date", attrName="weightDate", label="权重期限"),
 		@Column(name="hits", attrName="hits", label="点击数"),
 		@Column(name="posid", attrName="posid", label="推荐位"),
-		@Column(name="custom_content_view", attrName="customContentView", label="自定义内容视图"),
-		@Column(name="view_config", attrName="viewConfig", label="视图配置"),
 		@Column(includeEntity=DataEntity.class),
 	}, joinTable={
 		@JoinTable(type=Type.LEFT_JOIN, entity=Category.class, attrName="category", alias="u2",
@@ -52,17 +50,16 @@ import com.jeesite.common.utils.excel.annotation.ExcelFields;
 	}, orderBy="a.update_date DESC"
 )
 
-@ExcelFields({
-	@ExcelField(title="文章标题", attrName="title", align=Align.CENTER, sort=30),
-	@ExcelField(title="关键词", attrName="keywords", align=Align.CENTER, sort=40),
-	@ExcelField(title="权重", attrName="weight", align=Align.LEFT, sort=50),
-	@ExcelField(title="点击数", attrName="hits", align=Align.CENTER, sort=60),
-	@ExcelField(title="状态", attrName="status", align=Align.CENTER, sort=70),
-	@ExcelField(title="发布者", attrName="createBy", align=Align.CENTER, sort=80),
-	@ExcelField(title="发布时间", attrName="create_date", align=Align.CENTER, sort=900, type=ExcelField.Type.EXPORT, dataFormat="yyyy-MM-dd HH:mm"),
-})
 public class Article extends DataEntity<Article> {
-	public static final String DEFAULT_TEMPLATE = "frontViewArticle";
+	@ExcelFields({
+			@ExcelField(title="文章标题", attrName="title", align=Align.CENTER, sort=30),
+			@ExcelField(title="关键词", attrName="keywords", align=Align.CENTER, sort=40),
+			@ExcelField(title="权重", attrName="weight", align=Align.LEFT, sort=50),
+			@ExcelField(title="点击数", attrName="hits", align=Align.CENTER, sort=60),
+			@ExcelField(title="状态", attrName="status", align=Align.CENTER, sort=70),
+			@ExcelField(title="发布者", attrName="createBy", align=Align.CENTER, sort=80),
+			@ExcelField(title="发布时间", attrName="create_date", align=Align.CENTER, sort=900, type=ExcelField.Type.EXPORT, dataFormat="yyyy-MM-dd HH:mm"),
+	})
 	
 	private static final long serialVersionUID = 1L;
 	private Category category;		// 归属栏目
@@ -76,8 +73,6 @@ public class Article extends DataEntity<Article> {
 	private Date weightDate;		// 权重期限
 	private Long hits;		// 点击数
 	private String posid;		// 推荐位
-	private String customContentView;		// 自定义内容视图
-	private String viewConfig;		// 视图配置
 	private ArticleData articleData;		// 子表列表
 	
 	
@@ -190,23 +185,6 @@ public class Article extends DataEntity<Article> {
 
 	public void setPosid(String posid) {
 		this.posid = posid;
-	}
-	
-	@Length(min=0, max=255, message="自定义内容视图长度不能超过 255 个字符")
-	public String getCustomContentView() {
-		return customContentView;
-	}
-
-	public void setCustomContentView(String customContentView) {
-		this.customContentView = customContentView;
-	}
-	
-	public String getViewConfig() {
-		return viewConfig;
-	}
-
-	public void setViewConfig(String viewConfig) {
-		this.viewConfig = viewConfig;
 	}
 	
 	public ArticleData getArticleData() {

@@ -13,22 +13,7 @@
 			<div class="box-body">
 				<div class="form-unit">${text('基本信息')}</div>
 				<#form:hidden path="categoryCode"/>
-				
-				<!-- <div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('所属站点')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:treeselect id="site" title="${text('机构选择')}"
-									path="site.id" labelPath="site.name"
-									url="${ctx}/sys/site/treeData"
-									class="" allowClear="true"/>
-							</div>
-						</div>
-					</div>
-				</div> -->
-				
+
 				<div class="row">
 					<div class="col-xs-6">
 						<div class="form-group">
@@ -210,41 +195,6 @@
 								<span class="required hide">*</span> ${text('是否需要审核')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:radio path="isAudit" dictType="sys_yes_no" class="form-control" />
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('自定义列表视图')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:select path="customListView" items="${listViewList}"  itemLabel="categoryCode" itemValue="categoryCode" blankOption="true" class="form-control" />
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('自定义内容视图')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:select path="customContentView" items="${contentViewList}"  itemLabel="categoryCode" itemValue="categoryCode" blankOption="true" class="form-control" />
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('视图配置')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="viewConfig" class="form-control"/>
 							</div>
 						</div>
 					</div>

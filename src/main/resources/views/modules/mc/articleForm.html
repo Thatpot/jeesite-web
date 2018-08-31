@@ -132,50 +132,7 @@
 						</div>
 					</div>
 				</div>
-				
-				<!-- 测试三级联动 -->
-				<div class="row">
-					<div class="col-xs-4">
-						<div class="form-group">
-							<label class="control-label col-sm-6" title="">
-								<span class="required hide">*</span> ${text('省')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-6">
-								<#form:select id="province" value="${areaProvinceDefault}" items="${areaProvince}" itemLabel="areaName" itemValue="areaCode" class="form-control" />
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-4">
-						<div class="form-group">
-							<label class="control-label col-sm-6" title="">
-								<span class="required hide">*</span> ${text('市')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-6">
-								<#form:select id="city" items="${areaCity}" itemLabel="areaName" itemValue="areaCode" class="form-control" />
-							</div>
-						</div>
-					</div>
-					<div class="col-xs-4" id="countyBox">
-						<div class="form-group">
-							<label class="control-label col-sm-6" title="">
-								<span class="required hide">*</span> ${text('县')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-6">
-								<#form:select path="customContentView" items="${areaCounty}" itemLabel="areaName" itemValue="areaCode"  class="form-control" />
-							</div>
-						</div>
-					</div>
-				</div>
-				
-				
-				<div class="row">
-					<div class="col-xs-6">
-						<div class="form-group">
-							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('视图配置')}：<i class="fa icon-question hide"></i></label>
-							<div class="col-sm-8">
-								<#form:input path="viewConfig" class="form-control"/>
-							</div>
-						</div>
-					</div>
-				</div>
+
 				<!-- 文章详表form -->
 				<div class="row">
 					<div class="col-xs-6">
@@ -312,31 +269,5 @@ function listselectCallback(id, action, index, layero, selectData){
 		this.selectData = selectData;
 		articleSelectRefresh(selectData);
 	}
-}
-//三级联动
-$('#province').on('select2:select', function (e) {
-	getDataFillSelect(e,"#city");
-});
-$('#city').on('select2:select', function (e) {
-	getDataFillSelect(e,"#customContentView");
-});
-function getDataFillSelect(e,element){
-	var parentCode = e.params.data.id;
-	  js.ajaxSubmit('${ctx}/sys/area/listData', {parentCode: parentCode}, function(data){
-		 var array = [];
-		  for (var i=0; i<data.length; i++){
-			  array[i] = {
-					id : data[i].areaCode,
-					text : data[i].areaName	  
-			  }
-		  }
-		 if(data.length==1){
-			 $("#countyBox").attr("hidden",true);
-		 }else{
-			 $("#countyBox").removeAttr("hidden");
-		 }
-		 $(element).empty();
-		 $(element).select2({data:array});
-	  })
 }
 </script>

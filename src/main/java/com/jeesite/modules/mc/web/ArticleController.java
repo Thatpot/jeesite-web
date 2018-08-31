@@ -3,7 +3,6 @@
  */
 package com.jeesite.modules.mc.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.config.Global;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.lang.DateUtils;
@@ -28,15 +26,8 @@ import com.jeesite.common.utils.excel.ExcelExport;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.mc.entity.Article;
 import com.jeesite.modules.mc.entity.Category;
-import com.jeesite.modules.mc.entity.Site;
 import com.jeesite.modules.mc.service.ArticleService;
 import com.jeesite.modules.mc.service.CategoryService;
-import com.jeesite.modules.mc.service.FileTplService;
-import com.jeesite.modules.mc.service.SiteService;
-import com.jeesite.modules.mc.utils.McUtils;
-import com.jeesite.modules.mc.utils.TplUtils;
-import com.jeesite.modules.sys.entity.Area;
-import com.jeesite.modules.sys.service.AreaService;
 
 /**
  * 文章Controller
@@ -50,13 +41,7 @@ public class ArticleController extends BaseController {
 	@Autowired
 	private ArticleService articleService;
 	@Autowired
-	private FileTplService fileTplService;
-	@Autowired
 	private CategoryService categoryService;
-	@Autowired
-	private SiteService siteService;
-	@Autowired
-	private AreaService areaService;
 	/**
 	 * 获取数据
 	 */
@@ -103,54 +88,9 @@ public class ArticleController extends BaseController {
 					article.setCategory(category);
 					//该栏目是否需要审核
 					model.addAttribute("isAudit", (category.getIsAudit().equals(Global.YES))?Global.TRUE:Global.FALSE);
-					McUtils.addViewConfigAttribute(model, category);
 				}
 			}
 		}
-       /* model.addAttribute("contentViewList",getTplContent(Article.DEFAULT_TEMPLATE));*/
-		if(article.getIsNewRecord()) {//新数据，将省市县初始化
-			Area area = new Area();
-			area.setParentCode(Global.NO);
-			model.addAttribute("areaProvince", areaService.findList(area));
-			model.addAttribute("areaCity", ListUtils.newArrayList());
-			model.addAttribute("areaCounty", ListUtils.newArrayList());
-			model.addAttribute("areaProvinceDefault", null);
-		}else {
-			
-			//具体的县
-			Area area = new Area();
-			area.setAreaCode(article.getCustomContentView());
-			area = areaService.get(area);
-			//具体的市
-			Area area2 = new Area();
-			area2.setAreaCode(area.getParentCode());
-			area2 = areaService.get(area2);
-			//具体的省
-			Area area3 = new Area();
-			area3.setAreaCode(area2.getParentCode());
-			area3 = areaService.get(area3);
-			
-			//同级县
-			Area county = new Area();
-			county.setParentCode(area.getParentCode());
-			List<Area> areaCounty = areaService.findList(county);
-			
-			//同级市
-			Area city = new Area();
-			city.setParentCode(area2.getParentCode());
-			List<Area> areaCity = areaService.findList(city);
-			
-			//同级省
-			Area province = new Area();
-			province.setParentCode(area3.getParentCode());
-			List<Area> areaProvince = areaService.findList(province);
-			
-			model.addAttribute("areaProvinceDefault", area3);
-			model.addAttribute("areaProvince", areaProvince);
-			model.addAttribute("areaCity", areaCity);
-			model.addAttribute("areaCounty", areaCounty);	
-		}
-        model.addAttribute("article_DEFAULT_TEMPLATE",Article.DEFAULT_TEMPLATE);
 		model.addAttribute("article", article);
 		/*model.addAttribute("isAudit", Category);*/
 		return "modules/mc/articleForm";
@@ -191,29 +131,13 @@ public class ArticleController extends BaseController {
 		return renderResult(Global.TRUE, text("删除文章成功！"));
 	}
 	
-	 @SuppressWarnings("unused")
-	private List<Category> getTplContent(String prefix) {
-   		List<String> tplList = fileTplService.getNameListByPrefix(siteService.get(Site.getCurrentSiteId()).getSolutionPath());
-   		tplList = TplUtils.tplTrim(tplList, prefix, "");
-   		List<Category> list = new ArrayList<Category>();
-   		for (String item : tplList) {
-   			Category category = new Category();
-   			category.setCategoryCode(item);
-   			list.add(category);
-		}
-   		return list;
-   	}
-	 
 	/**
 	 * @Description: 文章选择器
-	 * @param empUser
-	 * @param selectData
-	 * @param checkbox
-	 * @param model
-	 * @return String  
+	 * @param article, data, checkbox, model
+	 * @returnType java.lang.String
 	 * @throws
 	 * @author xuyuxiang
-	 * @date 2018年8月3日上午9:58:36
+	 * @date 2018/8/31 14:57
 	 */
 	@RequiresPermissions("mc:article:view")
 	@RequestMapping(value = "articleSelect")
@@ -238,7 +162,6 @@ public class ArticleController extends BaseController {
 	@RequiresPermissions({"mc:article:view"})
 	@RequestMapping({"exportData"})
 	public void exportData(Article article, Boolean isAll, HttpServletResponse response) {
-		/*article.getCategory().setIsQueryChildren(true);*/
 		List<Article> list = articleService.findList(article);
 		String fileName = "文章数据" + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
 		ExcelExport ee = new ExcelExport("文章数据", Article.class);

@@ -23,7 +23,6 @@ import com.jeesite.modules.mc.entity.Category;
 import com.jeesite.modules.mc.entity.Link;
 import com.jeesite.modules.mc.service.CategoryService;
 import com.jeesite.modules.mc.service.LinkService;
-import com.jeesite.modules.mc.utils.McUtils;
 
 /**
  * 友情链接Controller
@@ -83,7 +82,6 @@ public class LinkController extends BaseController {
 					link.setCategory(null);
 				}else {
 					link.setCategory(category);
-					McUtils.addViewConfigAttribute(model, category);
 				}
 			}
 		}

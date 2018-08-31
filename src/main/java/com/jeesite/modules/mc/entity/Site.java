@@ -28,16 +28,11 @@ import com.jeesite.modules.sys.utils.UserUtils;
 		@Column(name="keywords", attrName="keywords", label="关键字"),
 		@Column(name="theme", attrName="theme", label="主题"),
 		@Column(name="copyright", attrName="copyright", label="版权信息"),
-		@Column(name="custom_index_view", attrName="customIndexView", label="自定义站点首页视图"),
 		@Column(includeEntity=DataEntity.class),
 	}, orderBy="a.update_date DESC"
 )
 public class Site extends DataEntity<Site> {
-	 /**
-   	 * 模板路径
-   	 */
-   	public static final String TPL_BASE = "/resources/views/modules/mc/front/themes";
-   	
+
 	private static final long serialVersionUID = 1L;
 	private String name;		// 站点名称
 	private String title;		// 站点标题
@@ -47,8 +42,7 @@ public class Site extends DataEntity<Site> {
 	private String keywords;		// 关键字
 	private String theme;		// 主题
 	private String copyright;		// 版权信息
-	private String customIndexView;		// 自定义站点首页视图
-	
+
 	public Site() {
 		this(null);
 	}
@@ -130,16 +124,7 @@ public class Site extends DataEntity<Site> {
 		this.copyright = copyright;
 	}
 	
-	@Length(min=0, max=255, message="自定义站点首页视图长度不能超过 255 个字符")
-	public String getCustomIndexView() {
-		return customIndexView;
-	}
 
-	public void setCustomIndexView(String customIndexView) {
-		this.customIndexView = customIndexView;
-	}
-	
-	
 	/**
 	 * 获取默认站点ID
 	 */
@@ -162,12 +147,4 @@ public class Site extends DataEntity<Site> {
 		return StringUtils.isNotBlank(siteId)?siteId:defaultSiteId();
 	}
 
-    /**
-   	 * 获得模板方案路径。如：/WEB-INF/views/modules/cms/front/themes/jeesite
-   	 *
-   	 * @return
-   	 */
-   	public String getSolutionPath() {
-   		return TPL_BASE + "/" + getTheme();
-   	}
 }
